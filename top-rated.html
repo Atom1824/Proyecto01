@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <title>MovieFinder - Top Rated</title>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-container">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="./assets/logo/logoMovieFinder.png" class="logo" alt="MovieFinder logo">
+            </a>
+        </div>
+
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <ul class="nav-links" id="primary-navigation">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="top-rated.html">Mejor Evaluados</a></li>
+            <li><a href="categories.html">Categorias</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <form id="search-form">
+                <input type="search" id="search-input" placeholder="Buscar pelicula...">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <h1 id="hero-title">Descubre tu proxima pelicula favorita</h1>
+            <p id="hero-desc">Explora miles de titulos y guarda tus favoritas.</p>
+            <button class="hero-btn" id="explore-btn">Explorar ahora</button>
+        </div>
+    </div>
+</section>
+
+<!-- TOP RATED -->
+<section id="top-rated-section">
+    <div class="Front-page-title">
+        <h2>Mejores Evaluadas</h2>
+    </div>
+
+    <div class="movie-grid" id="movie-top-rated"></div>
+
+    <div class="pagination">
+        <button id="prev">Prev</button>
+        <span id="page">Pagina 1</span>
+        <button id="next">Next</button>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-left">
+            <img src="./assets/logo/logoMovieFinder.png" class="footer-logo" alt="MovieFinder logo">
+        </div>
+
+        <div class="footer-links">
+            <a href="index.html">Inicio</a>
+            <a href="./top-rated.html">Mejor Evaluadas</a>
+            <a href="./categories.html">Categorias</a>
+        </div>
+
+        <div class="footer-right">
+            <p>&copy; 2024 MovieFinder</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JS -->
+<script src="./js/nav-menu.js"></script>
+<script src="./js/nav-search.js"></script>
+<script src="./js/top-rated.js"></script>
+
+</body>
+</html>

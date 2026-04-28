@@ -2,31 +2,42 @@ const API_KEY = "acb3f11d6c8a8e87e9b7c3834624dc16";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
-const Movie_grid = document.getElementById("movie-grid");
+const movieTopRated = document.getElementById("movie-top-rated");
+
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const pageText = document.getElementById("page");
+
+const hero = document.getElementById("hero");
+const heroTitle = document.getElementById("hero-title");
+const heroDesc = document.getElementById("hero-desc");
 
 let currentPage = 1;
 
-console.log("JS cargado");
-console.log(Movie_grid);
-
-// 🎬 POPULARES
-async function getPopularMovies(page = 1) {
+/* ========================= */
+/* 🎬 TOP RATED */
+/* ========================= */
+async function getTopRatedMovies(page = 1) {
     try {
         const response = await fetch(
-            BASE_URL + "/movie/popular?api_key=" + API_KEY + "&language=es-MX&page=" + page
+            `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=es-MX&page=${page}`
         );
 
         const data = await response.json();
 
-        displayMovies(data.results);
+        displayTopMovies(data.results);
+        updatePageText();
+
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-// 🎨 RENDER
-function displayMovies(movies) {
-    Movie_grid.innerHTML = "";
+/* ========================= */
+/* 🎨 RENDER */
+/* ========================= */
+function displayTopMovies(movies) {
+    movieTopRated.innerHTML = "";
 
     movies.forEach(movie => {
         const movieCard = document.createElement("div");
@@ -47,7 +58,7 @@ function displayMovies(movies) {
                 "<div class='trailer'></div>" +
             "</div>";
 
-        // 👇 SOLO UN HOVER LIMPIO
+        // 🎥 HOVER
         movieCard.addEventListener("mouseenter", () => {
             loadTrailer(movie.id, movieCard);
 
@@ -87,60 +98,13 @@ function displayMovies(movies) {
             removeTrailer(movieCard);
         });
 
-        Movie_grid.appendChild(movieCard);
+        movieTopRated.appendChild(movieCard);
     });
 }
 
-
-// 🔍 BUSCADOR
-const form = document.getElementById("search-form");
-const searchInput = document.getElementById("search-input");
-
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const query = searchInput.value.trim();
-
-    if (query) {
-        searchMovies(query);
-        searchInput.value = "";
-    } 
-});
-
-// 🔍 SEARCH
-async function searchMovies(query) {
-    try {
-        const response = await fetch(
-            BASE_URL +
-                "/search/movie?api_key=" +
-                API_KEY +
-                "&language=es-MX&query=" +
-                encodeURIComponent(query)
-        );
-
-        const data = await response.json();
-        displayMovies(data.results);
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-// ⭐ RATING COLOR
-function getRatingClass(vote) {
-    if (vote >= 7) return "green";
-    if (vote >= 5) return "orange";
-    return "red";
-}
-
-// ✂️ TEXTO CORTO
-function shortenText(text, maxLength = 120) {
-    if (!text) return "Sin descripción";
-    return text.length > maxLength
-        ? text.substring(0, maxLength) + "..."
-        : text;
-}
-
-// 🎥 TRAILER
+/* ========================= */
+/* 🎥 TRAILER */
+/* ========================= */
 async function loadTrailer(movieId, card) {
     const container = card.querySelector(".trailer");
 
@@ -148,7 +112,7 @@ async function loadTrailer(movieId, card) {
 
     try {
         const res = await fetch(
-            BASE_URL + "/movie/" + movieId + "/videos?api_key=" + API_KEY
+            `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`
         );
         const data = await res.json();
 
@@ -157,7 +121,7 @@ async function loadTrailer(movieId, card) {
         if (trailer) {
             container.innerHTML =
                 "<div class='trailer-wrap'>" +
-                    "<iframe id='player-" + movieId + "' " +
+                    "<iframe " +
                     "src='https://www.youtube.com/embed/" +
                     trailer.key +
                     "?autoplay=1&mute=1&controls=0' " +
@@ -170,16 +134,33 @@ async function loadTrailer(movieId, card) {
     }
 }
 
-// ❌ LIMPIAR TRAILER
+/* ========================= */
+/* ❌ LIMPIAR TRAILER */
+/* ========================= */
 function removeTrailer(card) {
     const container = card.querySelector(".trailer");
     container.innerHTML = "";
 }
 
-const prevBtn = document.getElementById("prev");
-const nextBtn = document.getElementById("next");
-const pageText = document.getElementById("page");
+/* ========================= */
+/* ⭐ UTILIDADES */
+/* ========================= */
+function getRatingClass(vote) {
+    if (vote >= 7) return "green";
+    if (vote >= 5) return "orange";
+    return "red";
+}
 
+function shortenText(text, maxLength = 120) {
+    if (!text) return "Sin descripción";
+    return text.length > maxLength
+        ? text.substring(0, maxLength) + "..."
+        : text;
+}
+
+/* ========================= */
+/* 📄 PAGINACIÓN */
+/* ========================= */
 function updatePageText() {
     pageText.textContent = "Página " + currentPage;
 }
@@ -187,43 +168,37 @@ function updatePageText() {
 prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
         currentPage--;
-        getPopularMovies(currentPage);
-        updatePageText();
+        getTopRatedMovies(currentPage);
     }
 });
 
 nextBtn.addEventListener("click", () => {
     currentPage++;
-    getPopularMovies(currentPage);
-    updatePageText();
+    getTopRatedMovies(currentPage);
 });
 
-// inicial
-
-
-const hero = document.getElementById("hero");
-const heroTitle = document.getElementById("hero-title");
-const heroDesc = document.getElementById("hero-desc");
-
+/* ========================= */
+/* 🎬 HERO DINÁMICO */
+/* ========================= */
 let heroMovies = [];
 let heroIndex = 0;
 
 async function loadHeroMovies() {
     try {
         const response = await fetch(
-            BASE_URL + "/movie/popular?api_key=" + API_KEY + "&language=es-MX"
+            `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=es-MX`
         );
 
         const data = await response.json();
 
-        heroMovies = data.results.slice(0, 10); // 👈 solo top 10
+        heroMovies = data.results.slice(0, 10);
 
-        updateHero(); // primera carga
+        updateHero();
 
         setInterval(() => {
             heroIndex = (heroIndex + 1) % heroMovies.length;
             updateHero();
-        }, 6000); // 👈 cambia cada 6 segundos
+        }, 6000);
 
     } catch (error) {
         console.error("Hero error:", error);
@@ -232,41 +207,37 @@ async function loadHeroMovies() {
 
 function updateHero() {
     const movie = heroMovies[heroIndex];
-
     if (!movie) return;
 
     const bg = movie.backdrop_path
         ? "https://image.tmdb.org/t/p/original" + movie.backdrop_path
         : "";
 
-    hero.style.backgroundImage = `url(${bg})`;
+    // 🔥 FADE EFECTO
+    hero.style.opacity = "0";
 
+    setTimeout(() => {
+        hero.style.backgroundImage = `url(${bg})`;
+
+        heroTitle.textContent = movie.title;
+        heroDesc.textContent = shortenText(movie.overview, 140);
+
+        hero.style.opacity = "1";
+    }, 300);
 }
 
-loadHeroMovies();
-
+/* ========================= */
+/* 🔽 SCROLL HERO */
+/* ========================= */
 const heroBtn = document.querySelector(".hero-btn");
+
 heroBtn.addEventListener("click", () => {
-    const grid = document.getElementById("movie-grid");
-    grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    const grid = document.getElementById("movie-top-rated");
+    grid.scrollIntoView({ behavior: "smooth" });
 });
 
-const params = new URLSearchParams(window.location.search);
-const query = params.get("search");
-
-if (query) {
-    searchMovies(query);
-} else {
-    getPopularMovies();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get("search");
-
-    if (query) {
-        searchMovies(query);
-    } else {
-        getPopularMovies();
-    }
-});
+/* ========================= */
+/* 🚀 INIT */
+/* ========================= */
+getTopRatedMovies();
+loadHeroMovies();

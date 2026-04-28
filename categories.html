@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorias</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-container">
+    <div class="logo-container">
+      <a href="index.html">
+        <img src="./assets/logo/logoMovieFinder.png" class="logo" alt="MovieFinder logo">
+      </a>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul class="nav-links" id="primary-navigation">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="top-rated.html">Mejor Evaluados</a></li>
+      <li><a href="categories.html">Categorias</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <form id="search-form">
+        <input type="search" id="search-input" placeholder="Buscar pelicula..." name="search">
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="categories-layout">
+
+  <div class="categories-mobile-bar">
+    <button class="sidebar-toggle" type="button" aria-expanded="false" aria-controls="categories-sidebar">
+      <span class="sidebar-toggle-icon" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <span class="sidebar-toggle-label">Generos</span>
+    </button>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="categories-sidebar">
+    <h3>Generos</h3>
+    <ul id="genre-list"></ul>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="categories-content">
+    <h2 id="category-title">Selecciona un genero</h2>
+    <div class="movie-grid" id="movie-grid"></div>
+  </main>
+
+</div>
+<div class="pagination">
+  <button id="prev">Prev</button>
+  <span id="page"></span>
+  <button id="next">Next</button>
+</div>
+
+<footer>
+  <div class="footer-container">
+
+    <div class="footer-left">
+      <img src="./assets/logo/logoMovieFinder.png" alt="logo" class="footer-logo">
+    </div>
+
+    <div class="footer-links">
+      <a href="./index.html">Inicio</a>
+      <a href="./top-rated.html">Mejor Evaluados</a>
+      <a href="./categories.html">Categorias</a>
+    </div>
+
+    <div class="footer-right">
+      <p>&copy; 2024 MovieFinder</p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- JS -->
+<script src="./js/nav-menu.js"></script>
+<script src="./js/nav-search.js"></script>
+<script src="./js/categories.js"></script>
+</body>
+</html>
